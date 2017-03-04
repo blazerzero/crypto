@@ -5,7 +5,7 @@ import base64
 import string
 import sys
 
-def stringgen(size = 10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+def stringgen(size = 10, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def intersect(cats, dogs):
@@ -15,8 +15,7 @@ def main():
     print("Hello")
     cathasher = hashlib.md5()
     doghasher = hashlib.md5()
-    cats_full = []
-    dogs_full = []
+
     chash10 = []
     dhash10 = []
 
@@ -28,6 +27,9 @@ def main():
 
     catfile.close()
     dogfile.close()
+
+    catbuf_new = catbuf
+    dogbuf_new = dogbuf
 
     catfile = open("cat.jpg", "a")
     dogfile = open("dog.jpg", "a")
@@ -41,31 +43,27 @@ def main():
     cathash = cathasher.hexdigest()
     doghash = doghasher.hexdigest()
 
-    cats_full.append(cathash)
-    dogs_full.append(doghash)
     chash10.append(cathash[0:9])
     dhash10.append(doghash[0:9])
 
     catgenfull = ""
     doggenfull = ""
     print(intersect(chash10, dhash10))
+
     for i in range(0,9999999):
         catgen = stringgen()
         doggen = stringgen()
 
-        catgenfull+=catgen
-        doggenfull+=catgen
 
-        catbuf+=catgen
-        dogbuf+=doggen
-
-        cathasher.update(catbuf)
-        doghasher.update(dogbuf)
+        cathasher.update(catgen)
+        doghasher.update(doggen)
 
         cathash = cathasher.hexdigest()
         doghash = doghasher.hexdigest()
-        cats_full.append(cathash)
-        dogs_full.append(doghash)
+        print(cathash[0:9])
+        print(doghash[0:9])
+        #cats_full.append(cathash)
+        #dogs_full.append(doghash)
         chash10.append(cathash[0:9])
         dhash10.append(doghash[0:9])
 
@@ -73,24 +71,18 @@ def main():
         catgen = stringgen()
         doggen = stringgen()
 
-        catgenfull+=catgen
-        doggenfull+=catgen
-
-        catbuf+=catgen
-        dogbuf+=doggen
-
-        cathasher.update(catbuf)
-        doghasher.update(dogbuf)
+        cathasher.update(catgen)
+        doghasher.update(doggen)
 
         cathash = cathasher.hexdigest()
         doghash = doghasher.hexdigest()
-        cats_full.append(cathash)
-        dogs_full.append(doghash)
+        print(cathash[0:9])
+        print(doghash[0:9])
         chash10.append(cathash[0:9])
         dhash10.append(doghash[0:9])
-        
-    catfile.write(catgenfull)
-    catfile.write(doggenfull)
+
+    catfile.write(catgen)
+    catfile.write(doggen)
     catfile.close()
     dogfile.close()
 
